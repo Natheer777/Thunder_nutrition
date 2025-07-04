@@ -1,0 +1,4 @@
+export {default as Home} from './Home/Home'
+export {default as Products} from './Products/Products'
+export {default as All_Products} from './All_Products/All_Products'
+export {default as Contacts} from './Contacts/Contacts'

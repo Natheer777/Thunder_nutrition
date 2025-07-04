@@ -1,0 +1,46 @@
+.Header_Product{
+    /* background-image: url('../../assets/hd_8c458e3489329de9532ce70409eeef1e_6827bbf6956ba.webp'); */
+    /* height: 60vh; */
+    /* background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat; */
+}
+.VideoThunder{
+    display: flex;
+    justify-content: center;
+}
+.VideoThunder video{
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1000;
+}
+.scaleVideo{
+    transform: scaleX(-1);
+}
+/* الفيديو يغطي كامل الشاشة */
+.background-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* حتى لا يغطي المحتوى */
+  overflow: hidden;
+}
+
+.background-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(0.4); /* تغميق بسيط لتحسين وضوح النص */
+}
+
+/* محتوى الصفحة فوق الفيديو */
+.content-overlay {
+  position: relative;
+  z-index: 1;
+  /* min-height: 100vh; */
+  color: white; /* تأكد من أن النص واضح على الفيديو */
+}

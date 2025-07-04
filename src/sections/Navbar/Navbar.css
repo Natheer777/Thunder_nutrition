@@ -1,0 +1,76 @@
+.navbar{
+    background: -webkit-linear-gradient(top, #3b84a9 , #000013);
+}
+.container-fluid{
+    display: flex;
+    justify-content: space-evenly !important;
+    padding-left: 0;
+    
+}
+.navbar-brand img{
+    width: 10rem;
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22' /%3E%3C/svg%3E");
+}
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+.nav-item {
+    margin: 10px;
+}
+
+.nav-link {
+    position: relative;
+    text-align: center;
+    width: 6rem;
+    color: var(--color-white) !important;
+    border: 2px solid var(--color-blue2);
+    margin: 10px auto;
+    transform: skew(-20deg);
+    overflow: hidden;
+    z-index: 1;
+    transition: color 0.4s ease;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0%;
+    height: 100%;
+    background-color: var(--color-blue2);
+    z-index: -1;
+    transition: width 0.4s ease;
+}
+
+/* عند التمرير بالماوس */
+.nav-link:hover::before {
+    width: 100%;
+    left: 0;
+    right: auto;
+}
+
+/* تعديل لون النص عند الهوفر */
+.nav-link:hover {
+    color: var(--color-dark); /* أو أي لون يناسبك للنص فوق الخلفية */
+}
+
+.nav-link span {
+    display: inline-block;
+    transform: skew(20deg); /* يعكس الميل ليظهر النص بشكل مستقيم */
+}
+
+@media screen and (max-width:991px){
+    .nav-link{
+        text-align: center;
+    }
+    .collapse{
+    margin-top: 20px;
+}
+}
+.collapse{
+    justify-content: end;
+}

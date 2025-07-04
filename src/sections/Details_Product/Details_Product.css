@@ -1,0 +1,226 @@
+.swiper_product {
+  margin-top: 0;
+}
+.swiper_product h1 {
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: 30px;
+}
+.Swiper {
+  display: flex;
+  align-items: center;
+}
+.swiper {
+  width: 90%;
+  height: 60vh;
+  margin: 20px;
+}
+
+.swiper-slide {
+  text-align: center;
+  line-height: 28;
+  font-size: 18px;
+  border-radius: 10px;
+  /* background: -webkit-linear-gradient(180deg, #1160aa, #04044f); */
+  color: var(--color-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  height: max-content;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--color-blue) !important;
+}
+.details_product {
+  color: var(--color-white);
+  padding: 10px;
+  border-radius: 10px;
+  background: -webkit-linear-gradient(-170deg, #3b84a9, #000013);
+}
+.details_product p {
+  font-size: 18px;
+  text-align: center;
+}
+.product-properties ul{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  justify-content: space-between;
+}
+
+.product-properties ul li{
+  flex: 1 1 180px;
+  background-color: #f8f9fa;
+  border: 1px solid var(--color-blue);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-properties ul li:hover {
+  background-color: var(--color-blue);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.product-properties ul li strong {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--color-blue2);
+}
+.product-flavors {
+  margin-top: 40px;
+}
+
+.product-flavors h3 {
+  font-size: 20px;
+  color: var(--color-blue);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.flavor-list {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.flavor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, background 0.3s;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: #f4f4f4;
+  width: 100px;
+  cursor: pointer;
+}
+
+.flavor-item:hover {
+  background-color: var(--color-blue);
+  color: white;
+  transform: translateY(-5px);
+}
+.flavor-item img{
+  width: 45px;
+    filter: drop-shadow(0 0 2px rgba(80, 185, 234, 0.6));
+    height: 45px;
+  filter: drop-shadow(0 0 2px rgba(80, 185, 234, 0.6));
+}
+
+.flavor-item span {
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+.Chocolate {
+  color: peru;
+}
+.Strawberry {
+  color: palevioletred;
+}
+.proprties_product ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+.proprties_product ul li {
+  background: -webkit-linear-gradient(50deg, #3b84a9, #000013);
+  padding: 20px;
+  margin: 10px;
+  list-style: none;
+  width: 40%;
+  color: var(--color-white);
+  text-align: center;
+  font-size: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+.warning {
+  color: rgb(255, 0, 0);
+  font-weight: bold;
+  font-size: 20px;
+}
+.how_use {
+  color: var(--color-blue);
+  font-size: 20px;
+  font-weight: bold;
+}
+.flavor-item {
+  width: max-content;
+  display: inline-block;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  border-radius: 10px;
+  color: white;
+  background-color: transparent;
+}
+
+
+/* اجعل الصورة أطول قليلاً على الشاشات الصغيرة */
+@media (max-width: 768px) {
+  .swiper-product-image {
+    height: 50vh !important;
+  }
+
+  /* تحريك الأسهم إلى المنتصف عموديًا */
+  .swiper-button-prev,
+  .swiper-button-next {
+    top: 45% !important;
+    transform: translateY(-50%);
+    color: white; /* أو أي لون مناسب */
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 16px; /* أصغر قليلاً على الشاشات الصغيرة */
+  }
+}
+.spanShowMore{
+  border-bottom: 2px solid white;
+  cursor: pointer;
+}
+.BackgroundImage {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* أو حسب ما يناسبك */
+  width: 100%;
+}
+@media screen and (max-width:500px){
+  .BackgroundImage{
+    background-size: contain;
+    height: 21vh;
+  }
+}

@@ -1,0 +1,22 @@
+.Details h1 {
+  text-align: center ;
+  font-size: 32px;
+  text-shadow: 0px 0px 40px var(--color-blue);
+ font-family: "Anton", sans-serif;  color: var(--color-blue);
+  animation: colorFade 3s infinite ease-in-out;
+}
+.Details p {
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-white);
+}
+.Details img {
+  width: 100%;
+}
+@media screen and (max-width:750px) {
+  .revers{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
