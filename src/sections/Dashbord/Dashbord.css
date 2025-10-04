@@ -1,0 +1,745 @@
+/* Dashboard typography */
+.dash {
+  font-family: "Open Sans", sans-serif;
+}
+.dash label{
+  text-align: start;
+  font-size: 14px;
+}
+/* Dashboard background */
+.dash .dashboard-bg {
+  background: linear-gradient(135deg, #e3f0ff 0%, #f8fafc 100%);
+  min-height: 100vh;
+}
+.dash h1{
+  font-size: 2.2rem;
+}
+/* Dashboard title */
+.dash .dashboard-title {
+  color: var(--color-blue2);
+  font-weight: 700;
+  font-size: 2.25rem;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+/* Table styles */
+.dash .dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.dash .dashboard-table th {
+  background: var(--color-blue2);
+  color: #fff;
+  padding: 12px;
+  font-weight: 600;
+  border: none;
+}
+
+.dash .dashboard-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #222;
+}
+
+.dash .dashboard-table tr:last-child td {
+  border-bottom: none;
+}
+
+.dash .logout {
+  background-color: orangered !important;
+}
+
+/* Button styles */
+.dash .dashboard-btn {
+  background: var(--color-blue2);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-right: 8px;
+}
+
+.dash .dashboard-btn:last-child {
+  margin-right: 0;
+}
+
+.dash .dashboard-btn:hover {
+  background: var(--color-blue2);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+}
+
+.dash .dashboard-btn.delete {
+  background: #dc2626;
+}
+
+.dash .dashboard-btn.delete:hover {
+  background: #b91c1c;
+}
+
+.dash .dashboard-btn.edit {
+  background: #f59e42;
+  color: #fff;
+}
+
+.dash .dashboard-btn.edit:hover {
+  background: #d97706;
+}
+
+/* Modal styles */
+.dash .dashboard-modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(37, 99, 235, 0.08);
+  display: flex;
+  align-items: flex-start; /* prevent clipping when modal is taller than viewport */
+  justify-content: center;
+  z-index: 1000;
+  overflow-y: auto; /* let the overlay scroll if needed */
+  padding: 24px; /* safe space around the modal */
+}
+
+.dash .dashboard-modal {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.12);
+  padding: 32px;
+  min-width: 320px;
+  max-width: 860px;
+  width: 92vw;
+  /* Fallback */
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Use dynamic viewport height on supported browsers to avoid mobile URL bar issues */
+@supports (height: 100dvh) {
+  .dash .dashboard-modal {
+    max-height: calc(100dvh - 64px);
+  }
+}
+@supports (height: 100svh) {
+  .dash .dashboard-modal {
+    max-height: calc(100svh - 64px);
+  }
+}
+@supports (height: 100lvh) {
+  .dash .dashboard-modal {
+    max-height: calc(100lvh - 64px);
+  }
+}
+
+.dash .dashboard-modal input,
+.dash .dashboard-modal textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+
+/* Better form grouping and label clarity (dash only) */
+.dash .form-group { margin-bottom: 6px; }
+.dash .form-label {
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+.dash .dashboard-modal input:disabled,
+.dash .dashboard-modal textarea:disabled {
+  background: #f1f5f9;
+  color: #6b7280;
+}
+
+.dash .dashboard-modal input:focus,
+.dash .dashboard-modal textarea:focus {
+  border-color: var(--color-blue2);
+  outline: none;
+}
+
+.dash .dashboard-modal textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.dash .dashboard-modal .dashboard-title {
+  font-size: 1.75rem;
+  margin-bottom: 16px;
+}
+
+/* Responsive two-column form grid inside modal */
+.dash .form-grid {
+  display: grid;
+  gap: 12px 16px;
+}
+
+@media (min-width: 640px) {
+  .dash .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dash .span-2 {
+  grid-column: span 2;
+}
+
+/* Table density adjustments */
+.dash .dashboard-table th,
+.dash .dashboard-table td {
+  font-size: 0.95rem;
+}
+
+.dash .dashboard-table .actions {
+  white-space: nowrap;
+}
+
+.dash .dashboard-table .col-id {
+  width: 72px;
+}
+
+.dash .dashboard-table .col-price {
+  width: 120px;
+}
+
+.dash .dashboard-table .col-actions {
+  width: 200px;
+}
+
+.dash .dashboard-table .col-image {
+  width: 96px;
+}
+
+/* Product thumbnail */
+.dash .product-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  background: #f1f5f9;
+}
+.dash .swiper-slide ,.swiper-slide-next{
+  line-height: 1 !important;
+}
+.dash .product-thumb.placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+/* Responsive product grid (mobile-friendly) */
+.dash .product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 480px) {
+  .dash .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .dash .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dash .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tighter image ratio on very small screens */
+@media (max-width: 480px) {
+  .dash .product-card-image {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.dash .product-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eef2ff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dash .product-card-image {
+  width: 100%;
+  aspect-ratio: 1.25 / 1;
+  /* slightly taller for better fit */
+  /* landscape-ish */
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash .product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dash .product-card-body {
+  padding: 12px 16px 0 16px;
+}
+
+/* Tighter title/price spacing for cleaner cards */
+.dash .product-card-title { margin-bottom: 4px; }
+.dash .product-card-price { margin-bottom: 10px; }
+
+.dash .product-card-title {
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dash .product-card-subtitle {
+  color: white;
+  /* slate-600 */
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dash .product-card-price {
+  color: #1e3a8a;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: #dbeafe;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.dash .product-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 0px 16px 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+.dash .product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+}
+
+/* Section tabs (navbar-like) */
+.dash .section-tabs {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px 0;
+}
+
+.dash .section-tabs .tab {
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #c7d2fe;
+  border-radius: 9999px;
+  /* pill */
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
+}
+
+.dash .section-tabs .tab:hover {
+  background: #eff6ff;
+}
+
+.dash .section-tabs .tab.active {
+  background: var(--color-blue2);
+  color: #fff;
+  border-color: var(--color-blue2);
+}
+
+/* Swiper tweaks */
+.dash .product-swiper {
+  position: relative;
+  overflow: hidden;
+  /* keep only current slides visible */
+  padding-bottom: 28px;
+  /* space for bullets */
+  --swiper-navigation-size: 18px;
+  /* icon size */
+}
+
+/* Constrain overall width and add side padding */
+.dash .product-swiper-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+@media (min-width: 768px) {
+  .dash .product-swiper-wrap {
+    padding: 0 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .dash .product-swiper-wrap {
+    padding: 0 16px;
+  }
+}
+
+.dash .product-swiper .swiper-button-prev,
+.dash .product-swiper .swiper-button-next {
+  color: var(--color-blue2);
+  width: 40px;
+  height: 40px;
+  top: 45%;
+  transform: translateY(-50%);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dash .product-swiper .swiper-button-prev:after,
+.dash .product-swiper .swiper-button-next:after {
+  font-size: 18px;
+}
+
+.dash .product-swiper .swiper-button-prev:hover,
+.dash .product-swiper .swiper-button-next:hover {
+  background: #f8fafc;
+}
+
+/* Explicit positions for arrows */
+.dash .product-swiper .swiper-button-prev {
+  left: 8px;
+  right: auto;
+}
+
+.dash .product-swiper .swiper-button-next {
+  right: 8px;
+  left: auto;
+}
+
+/* Keep disabled arrows visible (but non-interactive) */
+.dash .product-swiper .swiper-button-disabled {
+  opacity: 0.35 !important;
+  pointer-events: none;
+  display: flex !important;
+}
+
+.dash .product-swiper .swiper-pagination-bullet {
+  background: #bfdbfe;
+  opacity: 1;
+}
+
+.dash .product-swiper .swiper-pagination-bullet-active {
+  background: var(--color-blue2);
+}
+
+/* Inputs and buttons subtle rounding consistency */
+.dash .dashboard-modal input,
+.dash .dashboard-modal textarea,
+.dash .dashboard-btn {
+  border-radius: 8px;
+}
+
+/* Toolbar (search + actions) */
+.dash .toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0 12px 0;
+  flex-wrap: wrap;
+}
+
+.dash .toolbar-left {
+  flex: 1 1 280px;
+  min-width: 220px;
+}
+.dash .Headerr .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
+  position: inherit;
+}
+.dash .toolbar-right {
+  display: flex;
+  gap: 8px;
+}
+
+.dash .toolbar-search {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Subtle hover for inputs/buttons inside modal */
+.dash .dashboard-modal input:hover,
+.dash .dashboard-modal textarea:hover {
+  border-color: #d1d5db;
+}
+.dash .dashboard-btn:active {
+  transform: translateY(0.5px);
+}
+
+/* Make modal a bit more breathing on small screens without changing your max width */
+@media (max-width: 420px) {
+  .dash .dashboard-modal {
+    padding: 20px;
+  }
+  .dash .dashboard-modal-bg {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dash .toolbar {
+    gap: 8px;
+  }
+
+  .dash .toolbar-right {
+    width: 100%;
+    justify-content: space-evenly;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+
+
+.dash .update-info-section {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  margin: 32px auto 0 auto;
+  max-width: 420px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dash .update-info-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-blue2), var(--color-blue2));
+  animation: gradientBG 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.dash .update-info-section h3 {
+  margin: 0 0 24px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-align: center;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.dash .update-info-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-blue2), var(--color-blue2));
+  border-radius: 3px;
+}
+
+.dash .update-info-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dash .update-info-section .form-group {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.dash .update-info-section label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #374151;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.dash .update-info-section input[type="email"],
+.dash .update-info-section input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dash .update-info-section input:focus {
+  border-color: var(--color-blue2);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.dash .update-info-section input::placeholder {
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+.dash .update-info-section button[type="submit"] {
+  background: linear-gradient(135deg, var(--color-blue2), var(--color-blue2));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.dash .update-info-section button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, var(--color-blue2), var(--color-blue2));
+}
+
+.dash .update-info-section button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.dash .update-info-section button[type="submit"]:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.dash .update-info-section p {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Error message style */
+.dash .update-info-section p[role="alert"],
+.dash .update-info-section .error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Loading state */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.dash .update-info-section button[type="submit"]:disabled::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 1.5s infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+.dash .swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden.product-swiper{
+  height: auto;
+}
+.dash .update-info-section h1 {
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+  margin-bottom: 20px;
+}

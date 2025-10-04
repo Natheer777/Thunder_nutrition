@@ -24,13 +24,13 @@ export default function All_Product() {
               <p className="mb-4">
                 <strong>Price:</strong> {item.price}$
               </p>
-          <a
-  className="Link_Product"
-  href={`${item.const_QrCode}?from=internal`}
-  target="_blank"
->
-  read more
-</a>
+              <a
+                className="Link_Product"
+                href={`${item.const_QrCode}?from=internal`}
+                target="_blank"
+              >
+                read more
+              </a>
 
             </div>
           </div>

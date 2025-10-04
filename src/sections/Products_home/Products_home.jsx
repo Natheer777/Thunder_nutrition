@@ -16,7 +16,6 @@ export default function Products_home() {
     fetchSections();
   }, []);
 
-  // جلب جميع المنتجات
   const fetchAllProducts = async () => {
     setLoading(true);
     setError(null);
@@ -35,7 +34,6 @@ export default function Products_home() {
     }
   };
 
-  // جلب الأقسام من API
   const fetchSections = async () => {
     try {
       const response = await axios.get(
