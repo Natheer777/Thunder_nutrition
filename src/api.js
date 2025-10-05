@@ -43,12 +43,7 @@ export async function getAllProducts() {
     if ('id' in copy && (copy.p_id == null)) copy.p_id = toNumberOr(copy.id, copy.id);
     copy.price = toNumberOr(copy.price, 0);
     
-    // Convert null metrics to empty strings for form compatibility
-    copy.strength = toStringOrEmpty(copy.strength);
-    copy.side_effects = toStringOrEmpty(copy.side_effects);
-    copy.muscle_gain = toStringOrEmpty(copy.muscle_gain);
-    copy.keep_gains = toStringOrEmpty(copy.keep_gains);
-    copy.fat_water = toStringOrEmpty(copy.fat_water);
+
 
     // Map new API fields to expected ones
     // Prefer pname for display name if name is missing
@@ -122,84 +117,49 @@ export async function getProductByName(name) {
   return res.json();
 }
 
-export async function createProduct(productData) {
-  // Log the incoming data for debugging
-  console.log('createProduct called with data:', JSON.stringify({
-    ...productData,
-    // Don't log file objects as they can be very large
-    vid_url: productData.vid_url ? '[File]' : productData.vid_url,
-    img_url: productData.img_url ? '[File]' : productData.img_url,
-    img_url2: productData.img_url2 ? '[File]' : productData.img_url2,
-    img_background: productData.img_background ? '[File]' : productData.img_background,
-    images: productData.images ? `[${productData.images.length} files]` : null,
-    videos: productData.videos ? `[${productData.videos.length} files]` : null
-  }, null, 2));
-
-  // Destructure with defaults
-  const {
-    pname = '',
-    name = '',
-    description = '',
-    science_name = '',
-    how_to_use = '',
-    price = '',
-    qr_code = '',
-    const_QrCode = '',
-    warnings = '',
-    vial = '',
-    caliber = '',
-    sec_id = '',
-    type = '',
-    vid_url = null,
-    img_url = null,
-    img_url2 = null,
-    img_background = null,
-    images = [],
-    videos = [],
-    strength = '',
-    side_effects = '',
-    muscle_gain = '',
-    keep_gains = '',
-    fat_water = '',
-    weight = '',
-    sugars = '',
-    protein = '',
-    calories = '',
-    flavor1 = '',
-    flavor2 = '',
-    flavor3 = '',
-    flavor4 = '',
-    num_of_serving = '',
-    num_of_scope = ''
-  } = productData;
+export async function createProduct({
+  pname,
+  name,
+  description,
+  science_name,
+  how_to_use,
+  price,
+  qr_code,
+  const_QrCode,
+  const_BarCode,
+  warnings,
+  sec_id,
+  type,
+  vid_url,
+  img_url,
+  img_url2,
+  img_url3,
+  img_background,
+  images,
+  videos,
+  weight,
+  sugars,
+  protein,
+  calories,
+  carbs,
+  amino_acids,
+  bcaa,
+  flavor1,
+  flavor2,
+  flavor3,
+  flavor4,
+  flavors,
+  num_of_serving,
+  num_of_scope,
+}) {
   const formData = new FormData();
   const normalizeUrl = (u) => {
     const s = (u || "").trim();
     if (!s) return "";
     return /^https?:\/\//i.test(s) ? s : `https://thunder-nutrition.com/${s.replace(/^\/+/, "")}`;
   };
-  
-  // Ensure pname is always set and not empty
-  if (!pname || pname.trim() === '') {
-    console.error('Validation failed: pname is required');
-    throw new Error('Product name (pname) is required');
-  }
-  
-  // Always include pname and name (fallback to pname if name is not provided)
-  const finalPname = String(pname || '').trim();
-  const finalName = String(name || pname || '').trim();
-  
-  console.log('Setting form data - pname:', finalPname);
-  console.log('Setting form data - name:', finalName);
-  
-  formData.append("pname", finalPname);
-  formData.append("name", finalName);
-  
-  // Log all form data entries
-  console.log('FormData entries:');
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ': ', pair[1]);
-  }
+  if (pname != null) formData.append("pname", String(pname));
+  if (name != null) formData.append("name", String(name));
   if (description != null) formData.append("description", String(description));
   // Legacy key for backend compatibility
   if (description != null) formData.append("product_overview", String(description));
@@ -214,8 +174,6 @@ export async function createProduct(productData) {
     formData.append("const_QrCode", qrVal);
   }
   if (warnings != null) formData.append("warnings", String(warnings));
-  if (vial != null) formData.append("vial", String(vial));
-  if (caliber != null) formData.append("caliber", String(caliber));
   if (sec_id != null) formData.append("sec_id", String(Number(sec_id)));
   if (type != null) formData.append("type", String(type));
   if (weight != null) formData.append("weight", String(weight));
@@ -225,21 +183,6 @@ export async function createProduct(productData) {
   if (price !== undefined && price !== null && price !== '') {
     formData.append("price", String(price));
   }
-  if (strength !== undefined && strength !== null && strength !== '') {
-    formData.append("strength", String(strength));
-  }
-  if (side_effects !== undefined && side_effects !== null && side_effects !== '') {
-    formData.append("side_effects", String(side_effects));
-  }
-  if (muscle_gain !== undefined && muscle_gain !== null && muscle_gain !== '') {
-    formData.append("muscle_gain", String(muscle_gain));
-  }
-  if (keep_gains !== undefined && keep_gains !== null && keep_gains !== '') {
-    formData.append("keep_gains", String(keep_gains));
-  }
-  if (fat_water !== undefined && fat_water !== null && fat_water !== '') {
-    formData.append("fat_water", String(fat_water));
-  }
 
   // Nutrition metrics if provided
   if (protein !== undefined && protein !== null && protein !== '') {
@@ -248,8 +191,14 @@ export async function createProduct(productData) {
   if (calories !== undefined && calories !== null && calories !== '') {
     formData.append("calories", String(calories));
   }
-
-  // Flavors support: flavor1..flavor4 and combined JSON array
+  if (const_BarCode != null) formData.append("const_BarCode", String(const_BarCode));
+  if (img_url3 != null) formData.append("img_url3", String(img_url3));
+  if (carbs != null) formData.append("carbs", String(carbs));
+  if (amino_acids != null) formData.append("amino_acids", String(amino_acids));
+  if (bcaa != null) formData.append("bcaa", String(bcaa));
+  if (flavors != null && Array.isArray(flavors)) {
+    formData.append("flavors", JSON.stringify(flavors));
+  }
   const updFlavorsArr = [flavor1, flavor2, flavor3, flavor4].filter((f) => f != null && `${f}`.trim() !== "");
   if (updFlavorsArr.length) {
     formData.append("flavor1", String(updFlavorsArr[0] ?? ''));
@@ -264,15 +213,7 @@ export async function createProduct(productData) {
 
   
 
-  // Debug logging
-  console.log('FormData metrics:', {
-    strength: formData.get('strength'),
-    side_effects: formData.get('side_effects'),
-    muscle_gain: formData.get('muscle_gain'),
-    keep_gains: formData.get('keep_gains'),
-    fat_water: formData.get('fat_water')
-  });
-
+  
   // Files: if user selected a File, append it; if it's a string URL, also append as string for backend compatibility
   // Decide video file to send: prefer vid_url, else first of videos
   const videoFile =
@@ -284,9 +225,8 @@ export async function createProduct(productData) {
           ? videos
           : null;
   if (videoFile) {
-    // Append using both possible backend keys
+    // Send video file with primary field name
     formData.append("vid_url", videoFile);
-    formData.append("videos", videoFile);
   } else if (typeof vid_url === 'string' && vid_url.trim() !== '') {
     formData.append("vid_url", vid_url.trim());
   } else if (Array.isArray(videos) && typeof videos[0] === "string") {
@@ -303,9 +243,8 @@ export async function createProduct(productData) {
           ? images
           : null;
   if (imageFile) {
-    // Append using both possible backend keys
+    // Send image file with primary field name
     formData.append("img_url", imageFile);
-    formData.append("images", imageFile);
   } else if (img_url != null) {
     formData.append("img_url", String(img_url));
   } else if (Array.isArray(images) && typeof images[0] === "string") {
@@ -324,95 +263,20 @@ export async function createProduct(productData) {
     formData.append("img_background", String(img_background));
   }
 
-  // Simple file size validation (max 10MB per file)
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-  const files = [
-    { file: vid_url, name: 'Video' },
-    { file: img_url, name: 'Image 1' },
-    { file: img_url2, name: 'Image 2' },
-    { file: img_background, name: 'Background Image' },
-    ...(Array.isArray(images) ? images.map((f, i) => ({ file: f, name: `Image ${i + 1}` })) : []),
-    ...(Array.isArray(videos) ? videos.map((f, i) => ({ file: f, name: `Video ${i + 1}` })) : [])
-  ].filter(item => item.file);
-
-  for (const { file, name } of files) {
-    if (file instanceof File && file.size > MAX_FILE_SIZE) {
-      throw new Error(`${name} is too large. Maximum size is 10MB.`);
-    }
+  const res = await fetch("https://thunder-nutrition.com/api/CreateProduct.php", {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
   }
-
-  try {
-    console.log('Sending request to server...');
-    
-    // First, upload the video separately if it exists
-    let videoUrl = null;
-    if (vid_url && vid_url instanceof File) {
-      console.log('Uploading video file...');
-      const videoFormData = new FormData();
-      videoFormData.append('video', vid_url);
-      videoFormData.append('action', 'upload_video');
-      
-      const videoResponse = await fetch("https://thunder-nutrition.com/api/CreateProduct.php", {
-        method: "POST",
-        body: videoFormData
-      });
-      
-      if (!videoResponse.ok) {
-        const errorText = await videoResponse.text();
-        throw new Error(`Video upload failed: ${videoResponse.status} - ${videoResponse.statusText}`);
-      }
-      
-      const videoData = await videoResponse.json();
-      if (videoData.status === 'success' && videoData.video_url) {
-        formData.append('vid_url', videoData.video_url);
-        console.log('Video uploaded successfully:', videoData.video_url);
-      } else {
-        throw new Error(videoData?.message || 'Failed to upload video');
-      }
-    }
-    
-    // Now send the main product data
-    const response = await fetch("https://thunder-nutrition.com/api/CreateProduct.php", {
-      method: "POST",
-      body: formData
-    });
-    
-    console.log('Received response, status:', response.status);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Server responded with error:', {
-        status: response.status,
-        statusText: response.statusText,
-        errorText
-      });
-      throw new Error(`Server error: ${response.status} - ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    console.log('API Response:', data);
-    
-    if (data && data.status === "success") {
-      return data;
-    }
-    
-    throw new Error(data?.message || "Failed to create product");
-    
-  } catch (error) {
-    console.error('Error in createProduct:', {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
-    });
-    
-    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      throw new Error('Network error. Please check your internet connection.');
-    }
-    
-    throw error.message.includes('Failed to fetch') 
-      ? new Error('Could not connect to the server. Please try again later.')
-      : error;
-  }
+  const data = await res.json();
+  
+  // Debug: طباعة رد الـ API
+  console.log('API Response:', data);
+  
+  if (data && data.status === "success") return data;
+  throw new Error(data?.message || "Failed to create product");
 }
 
 export async function updateProduct({
@@ -425,30 +289,29 @@ export async function updateProduct({
   price,
   qr_code,
   const_QrCode,
+  const_BarCode,
   warnings,
-  vial,
-  caliber,
   sec_id,
   type,
   vid_url,
   img_url,
   img_url2,
+  img_url3,
   img_background,
   images,
   videos,
-  strength,
-  side_effects,
-  muscle_gain,
-  keep_gains,
-  fat_water,
   weight,
   sugars,
   protein,
   calories,
+  carbs,
+  amino_acids,
+  bcaa,
   flavor1,
   flavor2,
   flavor3,
   flavor4,
+  flavors,
   num_of_serving,
   num_of_scope,
 }) {
@@ -471,9 +334,6 @@ export async function updateProduct({
     formData.append("const_QrCode", updQrVal);
   }
   if (warnings != null) formData.append("warnings", String(warnings));
-  if (vial != null) formData.append("vial", String(vial));
-  if (caliber != null) formData.append("caliber", String(caliber));
-  if (sec_id != null) formData.append("sec_id", String(Number(sec_id)));
   if (type != null) formData.append("type", String(type));
   if (weight != null) formData.append("weight", String(weight));
   if (sugars != null) formData.append("sugars", String(sugars));
@@ -482,21 +342,36 @@ export async function updateProduct({
   if (price !== undefined && price !== null && price !== '') {
     formData.append("price", String(price));
   }
-  if (strength !== undefined && strength !== null && strength !== '') {
-    formData.append("strength", String(strength));
+
+  // Nutrition metrics if provided
+  if (protein !== undefined && protein !== null && protein !== '') {
+    formData.append("protein", String(protein));
   }
-  if (side_effects !== undefined && side_effects !== null && side_effects !== '') {
-    formData.append("side_effects", String(side_effects));
+  if (calories !== undefined && calories !== null && calories !== '') {
+    formData.append("calories", String(calories));
   }
-  if (muscle_gain !== undefined && muscle_gain !== null && muscle_gain !== '') {
-    formData.append("muscle_gain", String(muscle_gain));
+
+  if (const_BarCode != null) formData.append("const_BarCode", String(const_BarCode));
+  if (img_url3 != null) formData.append("img_url3", String(img_url3));
+  if (carbs != null) formData.append("carbs", String(carbs));
+  if (amino_acids != null) formData.append("amino_acids", String(amino_acids));
+  if (bcaa != null) formData.append("bcaa", String(bcaa));
+  if (flavors != null && Array.isArray(flavors)) {
+    formData.append("flavors", JSON.stringify(flavors));
   }
-  if (keep_gains !== undefined && keep_gains !== null && keep_gains !== '') {
-    formData.append("keep_gains", String(keep_gains));
+
+  // Flavors support: flavor1..flavor4 and combined JSON array (for backward compatibility)
+  const updFlavorsArr = [flavor1, flavor2, flavor3, flavor4].filter((f) => f != null && `${f}`.trim() !== "");
+  if (updFlavorsArr.length) {
+    formData.append("flavor1", String(updFlavorsArr[0] ?? ''));
+    if (updFlavorsArr[1]) formData.append("flavor2", String(updFlavorsArr[1]));
+    if (updFlavorsArr[2]) formData.append("flavor3", String(updFlavorsArr[2]));
+    if (updFlavorsArr[3]) formData.append("flavor4", String(updFlavorsArr[3]));
+    formData.append("flavors", JSON.stringify(updFlavorsArr));
   }
-  if (fat_water !== undefined && fat_water !== null && fat_water !== '') {
-    formData.append("fat_water", String(fat_water));
-  }
+
+  if (num_of_serving != null) formData.append("num_of_serving", String(num_of_serving));
+  if (num_of_scope != null) formData.append("num_of_scope", String(num_of_scope));
 
   // videos/images can be File, array of File, or string path; prefer vid_url/img_url if File, else fallback to first of videos/images
   const updVideoFile =
@@ -508,9 +383,8 @@ export async function updateProduct({
           ? videos
           : null;
   if (updVideoFile) {
-    // Append using both possible backend keys
+    // Send video file with primary field name
     formData.append("vid_url", updVideoFile);
-    formData.append("videos", updVideoFile);
   } else if (typeof vid_url === 'string' && vid_url.trim() !== '') {
     formData.append("vid_url", vid_url.trim());
   } else if (Array.isArray(videos) && typeof videos[0] === "string") {
@@ -526,9 +400,8 @@ export async function updateProduct({
           ? images
           : null;
   if (updImageFile) {
-    // Append using both possible backend keys
+    // Send image file with primary field name
     formData.append("img_url", updImageFile);
-    formData.append("images", updImageFile);
   } else if (img_url != null) {
     formData.append("img_url", String(img_url));
   } else if (Array.isArray(images) && typeof images[0] === "string") {

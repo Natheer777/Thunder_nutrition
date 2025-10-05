@@ -17,43 +17,7 @@ import "swiper/css/pagination";
 import "./Dashbord.css";
 
 function ProductForm({ initial, onSave, onClose, isLoading }) {
-  const [form, setForm] = useState({
-    pname: "",
-    name: "",
-    description: "",
-    science_name: "",
-    how_to_use: "",
-    price: "",
-    qr_code: "",
-    const_QrCode: "",
-    warnings: "",
-    vial: "",
-    caliber: "",
-    sec_id: "",
-    type: "",
-    weight: "",
-    strength: "",
-    side_effects: "",
-    muscle_gain: "",
-    keep_gains: "",
-    fat_water: "",
-    sugars: "",
-    protein: "",
-    calories: "",
-    flavor1: "",
-    flavor2: "",
-    flavor3: "",
-    flavor4: "",
-    num_of_serving: "",
-    num_of_scope: "",
-    vid_url: null,
-    img_url: null,
-    img_url2: null,
-    img_background: null,
-    images: [],
-    videos: [],
-    ...initial // This will override any default values with the ones from initial
-  });
+  const [form, setForm] = useState(initial);
   const [formError, setFormError] = useState("");
 
   function handleChange(e) {
@@ -70,11 +34,6 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
     // معالجة الحقول الرقمية - إبقاء القيمة كـ string بدلاً من تحويلها فوراً
     const numericFields = [
       "price",
-      "strength",
-      "side_effects",
-      "muscle_gain",
-      "keep_gains",
-      "fat_water",
     ];
 
     if (numericFields.includes(name)) {
@@ -92,30 +51,8 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
         className="dashboard-modal"
         onSubmit={(e) => {
           e.preventDefault();
-          
-          // Check for required fields
-          if (!form.pname) {
-            setFormError("Product name is required");
-            return;
-          }
-          
           setFormError("");
-          
-          // Create form data with all fields
-          const formData = { 
-            ...form,
-            // Ensure name is set (use pname if name is empty)
-            name: form.name || form.pname
-          };
-          
-          console.log('Form data before submission:', JSON.stringify(formData, null, 2));
-          
-          // Log the actual values being sent
-          console.log('pname value:', formData.pname);
-          console.log('name value:', formData.name);
-          console.log('Form data keys:', Object.keys(formData));
-          
-          onSave(formData);
+          onSave(form);
         }}
       >
         <h3 className="dashboard-title mb-4">
@@ -199,13 +136,13 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="const_QrCode" className="form-label">QR Code (const_QrCode)</label>
+            <label htmlFor="const_BarCode" className="form-label">Barcode (const_BarCode)</label>
             <input
-              id="const_QrCode"
-              name="const_QrCode"
-              placeholder="Alternative QR code field"
+              id="const_BarCode"
+              name="const_BarCode"
+              placeholder="Enter barcode"
               className="w-full mb-2 p-2 border rounded"
-              value={form.const_QrCode || ""}
+              value={form.const_BarCode || ""}
               onChange={handleChange}
             />
           </div>
@@ -248,49 +185,11 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               name="warnings"
               placeholder="Enter important warnings..."
               className="w-full mb-2 p-2 border rounded"
-              value={form.warnings || ""}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="vial" className="form-label">Vial</label>
-            <input
-              id="vial"
-              name="vial"
-              placeholder="Enter vial information"
-              className="w-full mb-2 p-2 border rounded"
-              value={form.vial || ""}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="caliber" className="form-label">Caliber</label>
-            <input
-              id="caliber"
-              name="caliber"
-              placeholder="Enter caliber information"
-              className="w-full mb-2 p-2 border rounded"
-              value={form.caliber || ""}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="img_url" className="form-label">Image 1</label>
-            <input
-              id="img_url"
-              name="img_url"
-              type="file"
-              accept="image/*"
-              className="w-full mb-2 p-2 border rounded"
-              onChange={(e) => setForm((f) => ({ ...f, img_url: e.target.files?.[0] || null }))}
               required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="img_url2" className="form-label">Image 2</label>
+            <label htmlFor="img_url2" className="form-label">Image 1</label>
             <input
               id="img_url2"
               name="img_url2"
@@ -298,6 +197,18 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               accept="image/*"
               className="w-full mb-2 p-2 border rounded"
               onChange={(e) => setForm((f) => ({ ...f, img_url2: e.target.files?.[0] || null }))}
+              required={!initial?.p_id}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="img_url3" className="form-label">Image 2</label>
+            <input
+              id="img_url3"
+              name="img_url3"
+              type="file"
+              accept="image/*"
+              className="w-full mb-2 p-2 border rounded"
+              onChange={(e) => setForm((f) => ({ ...f, img_url3: e.target.files?.[0] || null }))}
               required={!initial?.p_id}
             />
           </div>
@@ -352,14 +263,38 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="calories" className="form-label">Calories</label>
+            <label htmlFor="carbs" className="form-label">Carbs</label>
             <input
-              id="calories"
-              name="calories"
+              id="carbs"
+              name="carbs"
               type="text"
-              placeholder="e.g. 100"
+              placeholder="e.g. 10"
               className="w-full mb-2 p-2 border rounded"
-              value={form.calories ?? ""}
+              value={form.carbs ?? ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="amino_acids" className="form-label">Amino Acids</label>
+            <input
+              id="amino_acids"
+              name="amino_acids"
+              type="text"
+              placeholder="e.g. 5"
+              className="w-full mb-2 p-2 border rounded"
+              value={form.amino_acids ?? ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="bcaa" className="form-label">BCAA</label>
+            <input
+              id="bcaa"
+              name="bcaa"
+              type="text"
+              placeholder="e.g. 3"
+              className="w-full mb-2 p-2 border rounded"
+              value={form.bcaa ?? ""}
               onChange={handleChange}
             />
           </div>
@@ -620,7 +555,7 @@ export default function Dashboard() {
                   >
                     {filteredProducts.map((prod) => {
                       const img =
-                        prod.img_url || prod.img_url2 || prod.img_url3;
+                        prod.img_url || prod.img_url2 || prod.img_url3 || prod.img_background;
                       return (
                         <SwiperSlide key={prod.p_id}>
                           <div className="product-card">
@@ -674,7 +609,10 @@ export default function Dashboard() {
                               )}
                               <button
                                 className="dashboard-btn edit"
-                                onClick={() => setEditProduct(prod)}
+                                onClick={() => {
+                                  setEditProduct(prod);
+                                  setShowForm(true);
+                                }}
                               >
                                 Edit
                               </button>
@@ -706,63 +644,94 @@ export default function Dashboard() {
 
           {showForm && (
             <ProductForm
-              initial={{
+              initial={editProduct ? {
+                pname: editProduct.pname || "",
+                description: editProduct.description || "",
+                how_to_use: editProduct.how_to_use || "",
+                price: editProduct.price || "",
+                qr_code: editProduct.qr_code || "",
+                const_QrCode: editProduct.const_QrCode || "",
+                const_BarCode: editProduct.const_BarCode || "",
+                warnings: editProduct.warnings || "",
+                weight: editProduct.weight || "",
+                type: editProduct.type || "",
+                sec_id: editProduct.sec_id || "",
+                videos: editProduct.videos || [],
+                vid_url: editProduct.vid_url || null,
+                sugars: editProduct.sugars || "",
+                protein: editProduct.protein || "",
+                calories: editProduct.calories || "",
+                carbs: editProduct.carbs || "",
+                amino_acids: editProduct.amino_acids || "",
+                bcaa: editProduct.bcaa || "",
+                flavor1: editProduct.flavor1 || "",
+                flavor2: editProduct.flavor2 || "",
+                flavor3: editProduct.flavor3 || "",
+                flavor4: editProduct.flavor4 || "",
+                flavors: editProduct.flavors || [],
+                num_of_serving: editProduct.num_of_serving || "",
+                num_of_scope: editProduct.num_of_scope || "",
+                img_url: editProduct.img_url || null,
+                img_url2: editProduct.img_url2 || null,
+                img_url3: editProduct.img_url3 || null,
+                img_background: editProduct.img_background || null,
+              } : {
                 pname: "",
-                name: "",
                 description: "",
-                science_name: "",
                 how_to_use: "",
                 price: "",
                 qr_code: "",
                 const_QrCode: "",
+                const_BarCode: "",
                 warnings: "",
-                vial: "",
-                caliber: "",
-                sec_id: "",
-                type: "",
                 weight: "",
-                strength: "",
-                side_effects: "",
-                muscle_gain: "",
-                keep_gains: "",
-                fat_water: "",
+                type: "",
+                sec_id: "",
+                videos: [],
+                vid_url: null,
                 sugars: "",
                 protein: "",
                 calories: "",
+                carbs: "",
+                amino_acids: "",
+                bcaa: "",
                 flavor1: "",
                 flavor2: "",
                 flavor3: "",
                 flavor4: "",
+                flavors: [],
                 num_of_serving: "",
                 num_of_scope: "",
-                vid_url: null,
                 img_url: null,
                 img_url2: null,
+                img_url3: null,
                 img_background: null,
-                images: [],
-                videos: []
               }}
               onSave={(data) => {
-                const payload = { ...data };
                 if (editProduct?.p_id) {
-                  payload.p_id = editProduct.p_id;
+                  // Update existing product
+                  const payload = { ...data, p_id: editProduct.p_id };
                   if (!payload.sec_id) payload.sec_id = secIdForActiveTab;
-                  if (!payload.name) payload.name = editProduct.name;
                   updateMutation.mutate(payload);
                 } else {
+                  // Create new product
+                  const payload = { ...data };
                   if (!payload.sec_id) payload.sec_id = secIdForActiveTab;
                   createMutation.mutate(payload);
                 }
               }}
-              isLoading={updateMutation.isLoading}
+              onClose={() => {
+                setShowForm(false);
+                setEditProduct(null);
+              }}
+              isLoading={createMutation.isLoading || updateMutation.isLoading}
             />
-        )}
+          )}
 
           {deleteId && (
             <div className="dashboard-modal-bg">
               <div className="dashboard-modal">
                 <h5>Are you sure you want to delete this product ?</h5>
-
                 {deleteError && (
                   <div className="text-red-500 mb-3" role="alert">
                     {String(deleteError)}
