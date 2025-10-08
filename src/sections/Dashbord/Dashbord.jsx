@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQueries } from "@tanstack/react-query";
 import {
-  getAllProducts,
+  getProductsBySection,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -32,9 +32,7 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
     }
 
     // معالجة الحقول الرقمية - إبقاء القيمة كـ string بدلاً من تحويلها فوراً
-    const numericFields = [
-      "price",
-    ];
+    const numericFields = ["price"];
 
     if (numericFields.includes(name)) {
       // إبقاء القيمة كما هي (string) بدلاً من تحويلها لـ Number
@@ -60,7 +58,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
         </h3>
         <div className="form-grid">
           <div className="form-group">
-            <label htmlFor="pname" className="form-label">Product Name Qr</label>
+            <label htmlFor="pname" className="form-label">
+              Product Name Qr
+            </label>
             <input
               id="pname"
               name="pname"
@@ -71,10 +71,12 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               required
             />
           </div>
-         
+
           {/* Removed 'name' field per requested payload */}
           <div className="form-group span-2">
-            <label htmlFor="description" className="form-label">Description</label>
+            <label htmlFor="description" className="form-label">
+              Description
+            </label>
             <textarea
               id="description"
               name="description"
@@ -87,7 +89,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
           </div>
           {/* Scientific Name removed per request */}
           <div className="form-group span-2">
-            <label htmlFor="how_to_use" className="form-label">How To Use</label>
+            <label htmlFor="how_to_use" className="form-label">
+              How To Use
+            </label>
             <textarea
               id="how_to_use"
               name="how_to_use"
@@ -99,7 +103,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="price" className="form-label">Price</label>
+            <label htmlFor="price" className="form-label">
+              Price
+            </label>
             <input
               id="price"
               name="price"
@@ -113,7 +119,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="weight" className="form-label">Weight</label>
+            <label htmlFor="weight" className="form-label">
+              Weight
+            </label>
             <input
               id="weight"
               name="weight"
@@ -124,7 +132,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="qr_code" className="form-label">QR Code Link</label>
+            <label htmlFor="qr_code" className="form-label">
+              QR Code Link
+            </label>
             <input
               id="qr_code"
               name="qr_code"
@@ -136,7 +146,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="const_BarCode" className="form-label">Barcode (const_BarCode)</label>
+            <label htmlFor="const_BarCode" className="form-label">
+              Barcode (const_BarCode)
+            </label>
             <input
               id="const_BarCode"
               name="const_BarCode"
@@ -147,7 +159,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="type" className="form-label">Type</label>
+            <label htmlFor="type" className="form-label">
+              Type
+            </label>
             <select
               id="type"
               name="type"
@@ -161,25 +175,11 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               <option value="2">Injection</option>
             </select>
           </div>
-          <div className="form-group">
-            <label htmlFor="sec_id" className="form-label">Section</label>
-            <select
-              id="sec_id"
-              name="sec_id"
-              className="w-full mb-2 p-2 border rounded"
-              value={form.sec_id ?? ""}
-              onChange={handleChange}
-            >
-              <option value="">Select section</option>
-              <option value="1">Protein</option>
-              <option value="2">Carbs</option>
-              <option value="3">Pre Workout</option>
-              <option value="4">Creatine</option>
-              <option value="5">Amino</option>
-            </select>
-          </div>
+          {/* Section is set automatically based on the active dashboard tab */}
           <div className="form-group span-2">
-            <label htmlFor="warnings" className="form-label">Important Warnings</label>
+            <label htmlFor="warnings" className="form-label">
+              Important Warnings
+            </label>
             <textarea
               id="warnings"
               name="warnings"
@@ -189,57 +189,84 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="img_url2" className="form-label">Image 1</label>
+            <label htmlFor="img_url2" className="form-label">
+              Image 1
+            </label>
             <input
               id="img_url2"
               name="img_url2"
               type="file"
               accept="image/*"
               className="w-full mb-2 p-2 border rounded"
-              onChange={(e) => setForm((f) => ({ ...f, img_url2: e.target.files?.[0] || null }))}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  img_url2: e.target.files?.[0] || null,
+                }))
+              }
               required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="img_url3" className="form-label">Image 2</label>
+            <label htmlFor="img_url3" className="form-label">
+              Image 2
+            </label>
             <input
               id="img_url3"
               name="img_url3"
               type="file"
               accept="image/*"
               className="w-full mb-2 p-2 border rounded"
-              onChange={(e) => setForm((f) => ({ ...f, img_url3: e.target.files?.[0] || null }))}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  img_url3: e.target.files?.[0] || null,
+                }))
+              }
               required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="img_background" className="form-label">Image 3 (Background)</label>
+            <label htmlFor="img_background" className="form-label">
+              Image 3 (Background)
+            </label>
             <input
               id="img_background"
               name="img_background"
               type="file"
               accept="image/*"
               className="w-full mb-2 p-2 border rounded"
-              onChange={(e) => setForm((f) => ({ ...f, img_background: e.target.files?.[0] || null }))}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  img_background: e.target.files?.[0] || null,
+                }))
+              }
               required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="vid_url" className="form-label">Product Video</label>
+            <label htmlFor="vid_url" className="form-label">
+              Product Video
+            </label>
             <input
               id="vid_url"
               name="vid_url"
               type="file"
               accept="video/*"
               className="w-full mb-2 p-2 border rounded"
-              onChange={(e) => setForm((f) => ({ ...f, vid_url: e.target.files?.[0] || null }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, vid_url: e.target.files?.[0] || null }))
+              }
               required={!initial?.p_id}
             />
           </div>
 
           {/* Side-effect related fields removed per request */}
           <div className="form-group">
-            <label htmlFor="sugars" className="form-label">Sugars</label>
+            <label htmlFor="sugars" className="form-label">
+              Sugars
+            </label>
             <input
               id="sugars"
               name="sugars"
@@ -251,7 +278,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="protein" className="form-label">Protein</label>
+            <label htmlFor="protein" className="form-label">
+              Protein
+            </label>
             <input
               id="protein"
               name="protein"
@@ -263,19 +292,23 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="carbs" className="form-label">Carbs</label>
+            <label htmlFor="carb" className="form-label">
+              Carb
+            </label>
             <input
-              id="carbs"
-              name="carbs"
+              id="carb"
+              name="carb"
               type="text"
               placeholder="e.g. 10"
               className="w-full mb-2 p-2 border rounded"
-              value={form.carbs ?? ""}
+              value={form.carb ?? ""}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="amino_acids" className="form-label">Amino Acids</label>
+            <label htmlFor="amino_acids" className="form-label">
+              Amino Acids
+            </label>
             <input
               id="amino_acids"
               name="amino_acids"
@@ -287,7 +320,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="bcaa" className="form-label">BCAA</label>
+            <label htmlFor="bcaa" className="form-label">
+              BCAA
+            </label>
             <input
               id="bcaa"
               name="bcaa"
@@ -301,14 +336,40 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
           <div className="form-group">
             <label className="form-label">Flavors</label>
             <div className="grid grid-cols-2 gap-2">
-              <input name="flavor1" placeholder="Flavor 1" className="w-full mb-2 p-2 border rounded" value={form.flavor1 || ""} onChange={handleChange} />
-              <input name="flavor2" placeholder="Flavor 2" className="w-full mb-2 p-2 border rounded" value={form.flavor2 || ""} onChange={handleChange} />
-              <input name="flavor3" placeholder="Flavor 3" className="w-full mb-2 p-2 border rounded" value={form.flavor3 || ""} onChange={handleChange} />
-              <input name="flavor4" placeholder="Flavor 4" className="w-full mb-2 p-2 border rounded" value={form.flavor4 || ""} onChange={handleChange} />
+              <input
+                name="flavor1"
+                placeholder="Flavor 1"
+                className="w-full mb-2 p-2 border rounded"
+                value={form.flavor1 || ""}
+                onChange={handleChange}
+              />
+              <input
+                name="flavor2"
+                placeholder="Flavor 2"
+                className="w-full mb-2 p-2 border rounded"
+                value={form.flavor2 || ""}
+                onChange={handleChange}
+              />
+              <input
+                name="flavor3"
+                placeholder="Flavor 3"
+                className="w-full mb-2 p-2 border rounded"
+                value={form.flavor3 || ""}
+                onChange={handleChange}
+              />
+              <input
+                name="flavor4"
+                placeholder="Flavor 4"
+                className="w-full mb-2 p-2 border rounded"
+                value={form.flavor4 || ""}
+                onChange={handleChange}
+              />
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="num_of_serving" className="form-label">Servings per container</label>
+            <label htmlFor="num_of_serving" className="form-label">
+              Servings per container
+            </label>
             <input
               id="num_of_serving"
               name="num_of_serving"
@@ -319,7 +380,9 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="num_of_scope" className="form-label">Serving size</label>
+            <label htmlFor="num_of_scope" className="form-label">
+              Serving size
+            </label>
             <input
               id="num_of_scope"
               name="num_of_scope"
@@ -363,19 +426,59 @@ export default function Dashboard() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [search, setSearch] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialSection = (
-    searchParams.get("section") || "powder"
-  ).toLowerCase();
-  const [activeSection, setActiveSection] = useState(initialSection);
+  // Map sec_id values (as used in the form) to logical section keys used by the UI
+  const SEC_ID_TO_KEY = {
+    1: "protein",
+    2: "carb",
+    3: "pre workout",
+    4: "creatine",
+    5: "amino",
+  };
+  const KEY_TO_SEC_ID = Object.fromEntries(
+    Object.entries(SEC_ID_TO_KEY).map(([k, v]) => [v, Number(k)])
+  );
 
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
+  const rawInitial = (searchParams.get("section") || "protein").toLowerCase();
+  // Accept some common variants for pre-workout
+  const normalizeSectionKey = (s) => {
+    if (!s) return "protein";
+    const t = String(s)
+      .toLowerCase()
+      .replace(/[-\s]+/g, "_");
+    // Accept common variants for pre workout
+    if (
+      t === "pre" ||
+      t === "pre_workout" ||
+      t === "preworkout" ||
+      t === "pre-workout"
+    )
+      return "pre workout";
+    if (t === "protein" || t === "carb" || t === "creatine" || t === "amino")
+      return t;
+    // default
+    return "protein";
+  };
+
+  const [activeSection, setActiveSection] = useState(
+    normalizeSectionKey(rawInitial)
+  );
+
+  // Load all sections in parallel on page open so counts & lists are ready immediately
+  const SECTIONS = ["protein", "carb", "pre workout", "creatine", "amino"];
+  const sectionQueries = useQueries({
+    queries: SECTIONS.map((s) => ({
+      queryKey: ["products", s],
+      queryFn: () => getProductsBySection(s),
+      staleTime: 1000 * 60 * 2, // 2 minutes
+    })),
   });
+
+  const isLoading = sectionQueries.some((q) => q.isLoading);
+  const error = sectionQueries.find((q) => q.error)?.error ?? null;
+
+  const productsMap = Object.fromEntries(
+    SECTIONS.map((s, i) => [s, sectionQueries[i]?.data ?? []])
+  );
 
   const createMutation = useMutation({
     mutationFn: createProduct,
@@ -390,6 +493,7 @@ export default function Dashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries(["products"]);
       setEditProduct(null);
+      setShowForm(false);
     },
   });
 
@@ -415,52 +519,37 @@ export default function Dashboard() {
     });
   }
 
-  const normalizeType = (prod) => {
-    const t = prod?.type;
-    if (t === 0 || t === 1 || t === 2) return t === 0 ? 'tablet' : t === 1 ? 'powder' : 'injection';
-    if (typeof t === 'string' && t.trim() !== '') {
-      const n = Number(t);
-      if (!isNaN(n)) return n === 0 ? 'tablet' : n === 1 ? 'powder' : n === 2 ? 'injection' : '';
-      const s = t.toLowerCase();
-      if (s.includes('tablet')) return 'tablet';
-      if (s.includes('powder')) return 'powder';
-      if (s.includes('inject')) return 'injection';
-    }
-    // Fallback from sec_name if present
-    const sec = String(prod?.sec_name || '').toLowerCase();
-    if (sec === 'injectables' || sec === 'injection' || sec === 'injections') return 'injection';
-    if (sec === 'tablets' || sec === 'tablet' || sec === 'powder') return 'powder';
-    return '';
-  };
+  // ...existing code...
 
-  const filteredProducts = Array.isArray(products)
-    ? products
-        .filter((p) => normalizeType(p) === String(activeSection).toLowerCase())
-        .filter((p) => {
-          // Text search filter
-          const q = search.trim().toLowerCase();
-          if (!q) return true;
-          return (
-            String(p.pname || "").toLowerCase().includes(q) ||
-            String(p.name || "").toLowerCase().includes(q) ||
-            String(p.p_id || "").toLowerCase().includes(q)
-          );
-        })
-    : [];
+  const productsList = productsMap[activeSection] ?? [];
+  const filteredProducts = productsList.filter((p) => {
+    // Text search filter
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      String(p.pname || "")
+        .toLowerCase()
+        .includes(q) ||
+      String(p.name || "")
+        .toLowerCase()
+        .includes(q) ||
+      String(p.p_id || "")
+        .toLowerCase()
+        .includes(q)
+    );
+  });
 
-  const countFor = (sec) =>
-    Array.isArray(products)
-      ? products.filter((p) => normalizeType(p) === String(sec)).length
-      : 0;
+  const countFor = (secKey) => (productsMap[secKey] || []).length;
 
   function setSection(sec) {
-    const norm = (sec || "injectables").toLowerCase();
+    const norm = normalizeSectionKey(sec);
     setActiveSection(norm);
     setSearchParams({ section: norm });
   }
 
-  // Keep fallback mapping only if needed elsewhere; form now provides sec_id
-  const secIdForActiveTab = activeSection === "injection" ? 1 : 2;
+  // sec_id to use when creating/updating if none provided by the form
+  const secIdForActiveTab =
+    KEY_TO_SEC_ID[activeSection] || KEY_TO_SEC_ID.protein;
 
   return (
     <div className="dash">
@@ -494,29 +583,43 @@ export default function Dashboard() {
           </div>
           <div className="section-tabs">
             <button
-              className={`tab ${activeSection === "tablet" ? "active" : ""}`}
-              onClick={() => setSection("tablet")}
+              className={`tab ${activeSection === "protein" ? "active" : ""}`}
+              onClick={() => setSection("protein")}
             >
-              Tablet ({countFor("tablet")})
+              Protein ({countFor("protein")})
             </button>
             <button
-              className={`tab ${activeSection === "powder" ? "active" : ""}`}
-              onClick={() => setSection("powder")}
+              className={`tab ${activeSection === "carb" ? "active" : ""}`}
+              onClick={() => setSection("carb")}
             >
-              Powder ({countFor("powder")})
+              Carb ({countFor("carb")})
             </button>
             <button
-              className={`tab ${activeSection === "injection" ? "active" : ""}`}
-              onClick={() => setSection("injection")}
+              className={`tab ${
+                activeSection === "pre workout" ? "active" : ""
+              }`}
+              onClick={() => setSection("pre workout")}
             >
-              Injection ({countFor("injection")})
+              Pre Workout ({countFor("pre workout")})
+            </button>
+            <button
+              className={`tab ${activeSection === "creatine" ? "active" : ""}`}
+              onClick={() => setSection("creatine")}
+            >
+              Creatine ({countFor("creatine")})
+            </button>
+            <button
+              className={`tab ${activeSection === "amino" ? "active" : ""}`}
+              onClick={() => setSection("amino")}
+            >
+              Amino ({countFor("amino")})
             </button>
           </div>
           {isLoading ? (
             <div>Loading products...</div>
           ) : error ? (
             <div className="text-red-500">Error loading products.</div>
-          ) : Array.isArray(products) ? (
+          ) : (
             <div>
               {filteredProducts.length === 0 ? (
                 <div className="text-center text-gray-500">
@@ -555,7 +658,10 @@ export default function Dashboard() {
                   >
                     {filteredProducts.map((prod) => {
                       const img =
-                        prod.img_url || prod.img_url2 || prod.img_url3 || prod.img_background;
+                        prod.img_url ||
+                        prod.img_url2 ||
+                        prod.img_url3 ||
+                        prod.img_background;
                       return (
                         <SwiperSlide key={prod.p_id}>
                           <div className="product-card">
@@ -621,9 +727,17 @@ export default function Dashboard() {
                                 onClick={() => {
                                   setDeleteError(null);
                                   setDeleteTarget(prod);
-                                  const raw = prod.p_id ?? prod.id ?? prod.product_id ?? prod.pid;
-                                  const cleaned = typeof raw === 'string' ? raw.trim() : raw;
-                                  const numeric = cleaned != null && !isNaN(Number(cleaned)) ? Number(cleaned) : cleaned;
+                                  const raw =
+                                    prod.p_id ??
+                                    prod.id ??
+                                    prod.product_id ??
+                                    prod.pid;
+                                  const cleaned =
+                                    typeof raw === "string" ? raw.trim() : raw;
+                                  const numeric =
+                                    cleaned != null && !isNaN(Number(cleaned))
+                                      ? Number(cleaned)
+                                      : cleaned;
                                   setDeleteId(numeric);
                                 }}
                               >
@@ -638,75 +752,77 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
-          ) : (
-            <div className="text-red-500">No products found or API error.</div>
           )}
 
           {showForm && (
             <ProductForm
-              initial={editProduct ? {
-                pname: editProduct.pname || "",
-                description: editProduct.description || "",
-                how_to_use: editProduct.how_to_use || "",
-                price: editProduct.price || "",
-                qr_code: editProduct.qr_code || "",
-                const_QrCode: editProduct.const_QrCode || "",
-                const_BarCode: editProduct.const_BarCode || "",
-                warnings: editProduct.warnings || "",
-                weight: editProduct.weight || "",
-                type: editProduct.type || "",
-                sec_id: editProduct.sec_id || "",
-                videos: editProduct.videos || [],
-                vid_url: editProduct.vid_url || null,
-                sugars: editProduct.sugars || "",
-                protein: editProduct.protein || "",
-                calories: editProduct.calories || "",
-                carbs: editProduct.carbs || "",
-                amino_acids: editProduct.amino_acids || "",
-                bcaa: editProduct.bcaa || "",
-                flavor1: editProduct.flavor1 || "",
-                flavor2: editProduct.flavor2 || "",
-                flavor3: editProduct.flavor3 || "",
-                flavor4: editProduct.flavor4 || "",
-                flavors: editProduct.flavors || [],
-                num_of_serving: editProduct.num_of_serving || "",
-                num_of_scope: editProduct.num_of_scope || "",
-                img_url: editProduct.img_url || null,
-                img_url2: editProduct.img_url2 || null,
-                img_url3: editProduct.img_url3 || null,
-                img_background: editProduct.img_background || null,
-              } : {
-                pname: "",
-                description: "",
-                how_to_use: "",
-                price: "",
-                qr_code: "",
-                const_QrCode: "",
-                const_BarCode: "",
-                warnings: "",
-                weight: "",
-                type: "",
-                sec_id: "",
-                videos: [],
-                vid_url: null,
-                sugars: "",
-                protein: "",
-                calories: "",
-                carbs: "",
-                amino_acids: "",
-                bcaa: "",
-                flavor1: "",
-                flavor2: "",
-                flavor3: "",
-                flavor4: "",
-                flavors: [],
-                num_of_serving: "",
-                num_of_scope: "",
-                img_url: null,
-                img_url2: null,
-                img_url3: null,
-                img_background: null,
-              }}
+              initial={
+                editProduct
+                  ? {
+                      pname: editProduct.pname || "",
+                      description: editProduct.description || "",
+                      how_to_use: editProduct.how_to_use || "",
+                      price: editProduct.price || "",
+                      qr_code: editProduct.qr_code || "",
+                      const_QrCode: editProduct.const_QrCode || "",
+                      const_BarCode: editProduct.const_BarCode || "",
+                      warnings: editProduct.warnings || "",
+                      weight: editProduct.weight || "",
+                      type: editProduct.type || "",
+                      sec_id: editProduct.sec_id || secIdForActiveTab,
+                      videos: editProduct.videos || [],
+                      vid_url: editProduct.vid_url || null,
+                      sugars: editProduct.sugars || "",
+                      protein: editProduct.protein || "",
+                      calories: editProduct.calories || "",
+                      carb: editProduct.carb || "",
+                      amino_acids: editProduct.amino_acids || "",
+                      bcaa: editProduct.bcaa || "",
+                      flavor1: editProduct.flavor1 || "",
+                      flavor2: editProduct.flavor2 || "",
+                      flavor3: editProduct.flavor3 || "",
+                      flavor4: editProduct.flavor4 || "",
+                      flavors: editProduct.flavors || [],
+                      num_of_serving: editProduct.num_of_serving || "",
+                      num_of_scope: editProduct.num_of_scope || "",
+                      img_url: editProduct.img_url || null,
+                      img_url2: editProduct.img_url2 || null,
+                      img_url3: editProduct.img_url3 || null,
+                      img_background: editProduct.img_background || null,
+                    }
+                  : {
+                      pname: "",
+                      description: "",
+                      how_to_use: "",
+                      price: "",
+                      qr_code: "",
+                      const_QrCode: "",
+                      const_BarCode: "",
+                      warnings: "",
+                      weight: "",
+                      type: "",
+                      sec_id: secIdForActiveTab,
+                      videos: [],
+                      vid_url: null,
+                      sugars: "",
+                      protein: "",
+                      calories: "",
+                      carb: "",
+                      amino_acids: "",
+                      bcaa: "",
+                      flavor1: "",
+                      flavor2: "",
+                      flavor3: "",
+                      flavor4: "",
+                      flavors: [],
+                      num_of_serving: "",
+                      num_of_scope: "",
+                      img_url: null,
+                      img_url2: null,
+                      img_url3: null,
+                      img_background: null,
+                    }
+              }
               onSave={(data) => {
                 if (editProduct?.p_id) {
                   // Update existing product
@@ -741,13 +857,14 @@ export default function Dashboard() {
                   <button
                     className="dashboard-btn delete"
                     onClick={() => {
-                      const pid = (deleteTarget?.p_id ?? deleteId);
-                      const p_id = pid != null && !isNaN(Number(pid)) ? Number(pid) : pid;
+                      const pid = deleteTarget?.p_id ?? deleteId;
+                      const p_id =
+                        pid != null && !isNaN(Number(pid)) ? Number(pid) : pid;
                       const payload = {
                         p_id,
                         sec_id: deleteTarget?.sec_id ?? secIdForActiveTab,
                       };
-                      console.debug('[Delete] payload', payload);
+                      console.debug("[Delete] payload", payload);
                       deleteMutation.mutate(payload);
                     }}
                     disabled={deleteMutation.isLoading}
@@ -757,7 +874,11 @@ export default function Dashboard() {
                   <button
                     className="dashboard-btn"
                     style={{ backgroundColor: "#e5e7eb", color: "#2563eb" }}
-                    onClick={() => { setDeleteId(null); setDeleteTarget(null); setDeleteError(null); }}
+                    onClick={() => {
+                      setDeleteId(null);
+                      setDeleteTarget(null);
+                      setDeleteError(null);
+                    }}
                   >
                     Cancel
                   </button>
