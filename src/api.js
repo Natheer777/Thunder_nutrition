@@ -212,6 +212,7 @@ export async function createProduct({
   flavors,
   num_of_serving,
   num_of_scope,
+  other,
 }) {
   const formData = new FormData();
   const normalizeUrl = (u) => {
@@ -280,6 +281,7 @@ export async function createProduct({
     formData.append("num_of_serving", String(num_of_serving));
   if (num_of_scope != null)
     formData.append("num_of_scope", String(num_of_scope));
+  if (other != null) formData.append("other", String(other));
 
   // Files: if user selected a File, append it; if it's a string URL, also append as string for backend compatibility
   // Decide video file to send: prefer vid_url, else first of videos
@@ -384,6 +386,7 @@ export async function updateProduct({
   flavors,
   num_of_serving,
   num_of_scope,
+  other,
 }) {
   const formData = new FormData();
   const normalizeUrl = (u) => {
@@ -451,6 +454,7 @@ export async function updateProduct({
     formData.append("num_of_serving", String(num_of_serving));
   if (num_of_scope != null)
     formData.append("num_of_scope", String(num_of_scope));
+  if (other != null) formData.append("other", String(other));
 
   // videos/images can be File, array of File, or string path; prefer vid_url/img_url if File, else fallback to first of videos/images
   const updVideoFile =

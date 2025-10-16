@@ -292,6 +292,20 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
             />
           </div>
           <div className="form-group">
+            <label htmlFor="calories" className="form-label">
+              Calories
+            </label>
+            <input
+              id="calories"
+              name="calories"
+              type="text"
+              placeholder="e.g. 120"
+              className="w-full mb-2 p-2 border rounded"
+              value={form.calories ?? ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="carb" className="form-label">
               Carb
             </label>
@@ -389,6 +403,20 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               placeholder="e.g. Serving size: 1 scoop"
               className="w-full mb-2 p-2 border rounded"
               value={form.num_of_scope || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="other" className="form-label">
+              Other
+            </label>
+            <input
+              id="other"
+              name="other"
+              type="text"
+              placeholder="Enter any other information"
+              className="w-full mb-2 p-2 border rounded"
+              value={form.other || ""}
               onChange={handleChange}
             />
           </div>

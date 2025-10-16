@@ -1,4 +1,4 @@
-.Our{
+.Our {
   text-align: center;
   font-weight: bold;
   font-size: 50px !important;
@@ -6,6 +6,7 @@
   color: var(--color-blue);
   filter: drop-shadow(0 0 10px rgba(181, 220, 238, 0.6));
 }
+
 .All_Product {
   display: inline-flex;
   flex-wrap: wrap;
@@ -13,10 +14,13 @@
   gap: 40px;
   justify-content: space-evenly;
 }
-.All_Product_items ,.product-card {
-    border: 3px solid transparent;
-    border-image: linear-gradient(-135deg, #3b84a9, #000013);
-    border-image-slice: 1;
+
+.All_Product_items,
+.product-card {
+  width: 20rem;
+  /* border: 3px solid transparent; */
+  border-image: linear-gradient(-135deg, #3b84a9, #000013);
+  border-image-slice: 1;
 }
 
 .All_Product_items img {
@@ -25,44 +29,50 @@
   margin-bottom: 20px;
   border-radius: 10px;
 }
+
 .All_Product_items h2 {
-    font-size: 35px;
+  font-size: 35px;
   color: var(--color-blue);
-  
+
 }
+
 .All_Product_items p {
   color: white;
   font-size: 20px;
   text-align: center;
 }
-.Link_Product{
-    background: linear-gradient(70deg, #3b84a9, #000013);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
-    text-decoration: none;
-}
-      .Our {
-      font-size: 3rem;
-      font-weight: bold;
-      animation: Our 5s linear infinite;
-      background: linear-gradient(270deg, #036191, #50B9EA , #868b22);
-      background-size: 800% 800%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
 
-    @keyframes Our {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+.Link_Product {
+  background: linear-gradient(70deg, #3b84a9, #000013);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.Our {
+  font-size: 3rem;
+  font-weight: bold;
+  animation: Our 5s linear infinite;
+  background: linear-gradient(270deg, #036191, #50B9EA, #868b22);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes Our {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

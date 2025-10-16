@@ -164,17 +164,31 @@ export default function Products_home() {
                     </div>
                   )}
 
-                  {product.digit &&
-                    Object.entries(product.digit).map(([key, value]) => (
-                      <div key={key} className="product-price">
-                        <span className="price">
-                          <span className="impact">{capitalize(key)}:</span>{" "}
-                          {!isNaN(parseFloat(value))
-                            ? Math.trunc(parseFloat(value))
-                            : value}
-                        </span>
-                      </div>
-                    ))}
+{product.digit &&
+  Object.entries(product.digit).map(([key, value]) => {
+    // Special handling for CREA-CHEWS product
+    if (product.pname === 'CREA-CHEWS' && key === 'other') {
+      value = value.replace(/other:/i, '').trim();
+      key = '';
+      return (
+        <div key={key} className="product-price">
+          <span className="price" style={{ fontFamily: '"Anton", sans-serif', fontWeight: 100 }}>
+            {value}
+          </span>
+        </div>
+      );
+    }
+    return (
+      <div key={key} className="product-price">
+        <span className="price">
+          {key && <span className="impact">{capitalize(key)}: </span>}
+          {!isNaN(parseFloat(value))
+            ? Math.trunc(parseFloat(value))
+            : value}
+        </span>
+      </div>
+    );
+  })}
                 </div>
               </div>
             ))
