@@ -345,7 +345,6 @@
 
 .dash .product-card-actions {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
   padding: 12px 0px 16px 0px;
   justify-content: center;
@@ -735,8 +734,15 @@
     transform: translateX(100%);
   }
 }
+.dash .swiper-wrapper{
+  display: flex
+  ;
+      justify-content: space-around;
+}
 .dash .swiper.swiper-initialized.swiper-horizontal.swiper-backface-hidden.product-swiper{
   height: auto;
+
+
 }
 .dash .update-info-section h1 {
   font-family: "Open Sans", sans-serif;
