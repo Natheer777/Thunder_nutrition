@@ -5,11 +5,11 @@
   gap: 10px;
   padding: 0;
   list-style: none;
-  flex-wrap: wrap; /* يضمن التوافق مع الشاشات الصغيرة */
+  flex-wrap: wrap; 
 }
 
 .Popular ul li {
-  background-color: var(--color-dark); /* عدّله حسب ثيم موقعك */
+  /* background-color: var(--color-dark);  */
 
   border-radius: 12px;
   width: calc(40% - 10%);
@@ -29,7 +29,7 @@
   animation: float 3s ease-in-out infinite;
 }
 
-إضافة تفاوت في التأخير
+
 .Popular ul li:nth-child(1) img {
   animation-delay: 0s;
 }
