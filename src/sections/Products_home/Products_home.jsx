@@ -163,32 +163,49 @@ export default function Products_home() {
                       </span>
                     </div>
                   )}
+                  {product.digit &&
+                    Object.entries(product.digit).map(([key, value]) => {
+                      // Apply special formatting for any "other" field across all products
+                      if (key === "other") {
+                        const cleaned = String(value)
+                          .replace(/other:/i, "")
+                          .trim();
+                        return (
+                          <div
+                            key={`${product.p_id || index}-other`}
+                            className="product-price"
+                          >
+                            <span
+                              className="price"
+                              style={{
+                                fontFamily: '"Anton", sans-serif',
+                                fontWeight: 100,
+                              }}
+                            >
+                              {cleaned}
+                            </span>
+                          </div>
+                        );
+                      }
 
-{product.digit &&
-  Object.entries(product.digit).map(([key, value]) => {
-    // Special handling for CREA-CHEWS product
-    if (product.pname === 'CREA-CHEWS' && key === 'other') {
-      value = value.replace(/other:/i, '').trim();
-      key = '';
-      return (
-        <div key={key} className="product-price">
-          <span className="price" style={{ fontFamily: '"Anton", sans-serif', fontWeight: 100 }}>
-            {value}
-          </span>
-        </div>
-      );
-    }
-    return (
-      <div key={key} className="product-price">
-        <span className="price">
-          {key && <span className="impact">{capitalize(key)}: </span>}
-          {!isNaN(parseFloat(value))
-            ? Math.trunc(parseFloat(value))
-            : value}
-        </span>
-      </div>
-    );
-  })}
+                      return (
+                        <div
+                          key={`${product.p_id || index}-${key}`}
+                          className="product-price"
+                        >
+                          <span className="price">
+                            {key && (
+                              <span className="impact">
+                                {capitalize(key)}:{" "}
+                              </span>
+                            )}
+                            {!isNaN(parseFloat(value))
+                              ? Math.trunc(parseFloat(value))
+                              : value}
+                          </span>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             ))

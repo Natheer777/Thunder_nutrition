@@ -39,7 +39,7 @@ body{
 .top {
   opacity: 0;
   filter: blur(4px);
-  transform: translateY(30vw);
+  transform: translateY(10vw);
   transition: all 1.8s;
 }
 .show {
