@@ -204,7 +204,6 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
                   img_url2: e.target.files?.[0] || null,
                 }))
               }
-              required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
@@ -223,7 +222,6 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
                   img_url3: e.target.files?.[0] || null,
                 }))
               }
-              required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
@@ -242,7 +240,6 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
                   img_background: e.target.files?.[0] || null,
                 }))
               }
-              required={!initial?.p_id}
             />
           </div>
           <div className="form-group">
@@ -258,7 +255,6 @@ function ProductForm({ initial, onSave, onClose, isLoading }) {
               onChange={(e) =>
                 setForm((f) => ({ ...f, vid_url: e.target.files?.[0] || null }))
               }
-              required={!initial?.p_id}
             />
           </div>
 

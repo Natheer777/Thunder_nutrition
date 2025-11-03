@@ -387,88 +387,155 @@
   border-color: var(--color-blue2);
 }
 
-/* Swiper tweaks */
+/* Swiper Container */
 .dash .product-swiper {
   position: relative;
-  overflow: hidden;
-  /* keep only current slides visible */
-  padding-bottom: 28px;
-  /* space for bullets */
-  --swiper-navigation-size: 18px;
-  /* icon size */
+  width: 100%;
+  padding: 0 0 40px;
+  --swiper-navigation-size: 20px;
+  --swiper-theme-color: var(--color-blue2);
 }
 
-/* Constrain overall width and add side padding */
+/* Swiper Wrapper */
 .dash .product-swiper-wrap {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 8px;
+  padding: 0 16px;
+  position: relative;
 }
 
-@media (min-width: 768px) {
-  .dash .product-swiper-wrap {
-    padding: 0 12px;
-  }
+/* Navigation Buttons */
+.swiper-navigation {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 10;
 }
 
-@media (min-width: 1280px) {
-  .dash .product-swiper-wrap {
-    padding: 0 16px;
-  }
-}
-
-.dash .product-swiper .swiper-button-prev,
-.dash .product-swiper .swiper-button-next {
-  color: var(--color-blue2);
+.swiper-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 40px;
   height: 40px;
-  top: 45%;
-  transform: translateY(-50%);
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 9999px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 10;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
 }
 
-.dash .product-swiper .swiper-button-prev:after,
-.dash .product-swiper .swiper-button-next:after {
-  font-size: 18px;
+.dash .swiper-button-prev {
+  left: -20px;
+  background-color: white;
 }
 
-.dash .product-swiper .swiper-button-prev:hover,
-.dash .product-swiper .swiper-button-next:hover {
+.dash .swiper-button-next {
+  right: -20px;
+  background-color: white;
+}
+
+.swiper-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-blue2);
+}
+
+.swiper-button:hover {
   background: #f8fafc;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Explicit positions for arrows */
-.dash .product-swiper .swiper-button-prev {
-  left: 8px;
-  right: auto;
+/* Hide navigation on mobile */
+@media (max-width: 768px) {
+  .swiper-button {
+    display: none;
+  }
 }
 
-.dash .product-swiper .swiper-button-next {
-  right: 8px;
-  left: auto;
-}
-
-/* Keep disabled arrows visible (but non-interactive) */
+/* Disabled State */
 .dash .product-swiper .swiper-button-disabled {
-  opacity: 0.35 !important;
+  opacity: 0.2 !important;
   pointer-events: none;
-  display: flex !important;
+}
+
+/* Pagination */
+.dash .product-swiper .swiper-pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 0;
 }
 
 .dash .product-swiper .swiper-pagination-bullet {
-  background: #bfdbfe;
+  background: #cbd5e1;
   opacity: 1;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+  border-radius: 4px;
 }
 
 .dash .product-swiper .swiper-pagination-bullet-active {
   background: var(--color-blue2);
+  width: 24px;
+  transform: scale(1.1);
+}
+
+/* Slide Styling */
+.dash .product-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .dash .product-swiper-wrap {
+    padding: 0 12px;
+  }
+  
+  .dash .product-swiper .swiper-button-prev {
+    left: 8px;
+  }
+  
+  .dash .product-swiper .swiper-button-next {
+    right: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dash .product-swiper {
+    padding-bottom: 35px;
+  }
+  
+  .dash .product-swiper .swiper-button-prev,
+  .dash .product-swiper .swiper-button-next {
+    width: 36px;
+    height: 36px;
+    --swiper-navigation-size: 16px;
+  }
+  
+  .dash .product-swiper .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+    margin: 0 3px;
+  }
+  
+  .dash .product-swiper .swiper-pagination-bullet-active {
+    width: 20px;
+  }
 }
 
 /* Inputs and buttons subtle rounding consistency */
