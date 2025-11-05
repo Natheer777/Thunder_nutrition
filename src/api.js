@@ -106,53 +106,105 @@ const normalizeProductFromApi = (p) => {
   }
   copy.protein = toNumberOr(copy.protein, toNumberOr(copy?.digit?.protein));
   copy.calories = toNumberOr(copy.calories, toNumberOr(copy?.digit?.calories));
-  copy.carb = toNumberOr(copy.carb, toNumberOr(copy?.digit?.carb));
+  
+  // Handle both 'carb' and 'carbs' from API
+  copy.carb = toNumberOr(
+    copy.carb || copy.carbs,
+    toNumberOr(copy?.digit?.carb || copy?.digit?.carbs)
+  );
 
   return copy;
 };
 
-// Map section keys (exact backend names) to sec_id values used by the backend
-const KEY_TO_SEC_ID = {
-  protein: 1,
-  carb: 2,
-  "pre workout": 3,
-  creatine: 4,
-  amino: 5,
-};
+// Fetch sections dynamically from API
+export async function getSections() {
+  try {
+    const res = await fetch(`${BASE_URL}get_sections.php`);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    const sectionList = Array.isArray(data) ? data : data.sections || [];
+    return sectionList;
+  } catch (err) {
+    console.error("Failed to fetch sections:", err);
+    return []; // Return empty array on error
+  }
+}
+
+// Helper: Build SEC_ID mapping based on sections order
+export function buildSecIdMapping(sections) {
+  const SEC_ID_TO_KEY = Object.fromEntries(
+    sections.map((s, idx) => [idx + 1, s])
+  );
+  const KEY_TO_SEC_ID = Object.fromEntries(
+    Object.entries(SEC_ID_TO_KEY).map(([k, v]) => [v, Number(k)])
+  );
+  return { SEC_ID_TO_KEY, KEY_TO_SEC_ID };
+}
+
+// Cached sections list
+let cachedSections = null;
+
+// Get cached sections or fetch them
+export async function getCachedSections() {
+  if (cachedSections) return cachedSections;
+  
+  try {
+    const res = await fetch(`${BASE_URL}get_sections.php`);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    cachedSections = Array.isArray(data) ? data : data.sections || [];
+    return cachedSections;
+  } catch (err) {
+    console.error("Failed to fetch sections:", err);
+    return [];
+  }
+}
+
+// Normalize section name to match backend expectations
+async function normalizeSectionName(section) {
+  const sections = await getCachedSections();
+  
+  if (section == null) {
+    return sections[0] || "protein";
+  }
+  
+  // If numeric sec_id, convert to section name
+  if (typeof section === "number" || !isNaN(Number(section))) {
+    const idx = Number(section) - 1;
+    return sections[idx] || sections[0] || "protein";
+  }
+  
+  // If string, normalize and match against actual sections
+  const input = String(section).toLowerCase().trim();
+  
+  // Handle pre-workout variants
+  if (
+    input === "pre" ||
+    input === "pre_workout" ||
+    input === "preworkout" ||
+    input === "pre-workout" ||
+    input === "pre workout"
+  ) {
+    return sections.find(s => s.toLowerCase().includes("pre")) || "pre workout";
+  }
+  
+  // Direct match
+  const matched = sections.find(s => s.toLowerCase() === input);
+  if (matched) return matched;
+  
+  // Fuzzy match
+  const normalized = input.replace(/[-\s]+/g, "_");
+  const fuzzyMatched = sections.find(
+    s => s.toLowerCase().replace(/[-\s]+/g, "_") === normalized
+  );
+  if (fuzzyMatched) return fuzzyMatched;
+  
+  // Fallback
+  return sections[0] || "protein";
+}
 
 export async function getProductsBySection(section) {
-  // The backend expects the section name, e.g. { "name": "protein" }.
-  // Accept either a numeric sec_id or a string key.
-  const SEC_ID_TO_KEY = Object.fromEntries(
-    Object.entries(KEY_TO_SEC_ID).map(([k, v]) => [String(v), k])
-  );
-
-  let key = null;
-  if (section == null) {
-    key = "protein";
-  } else if (typeof section === "number") {
-    key = SEC_ID_TO_KEY[String(section)] ?? "protein";
-  } else if (!isNaN(Number(section))) {
-    key = SEC_ID_TO_KEY[String(Number(section))] ?? "protein";
-  } else {
-    // Normalize common variants into the exact backend name expected.
-    const s = String(section).toLowerCase().trim();
-    if (
-      s === "pre" ||
-      s === "pre_workout" ||
-      s === "preworkout" ||
-      s === "pre-workout" ||
-      s === "pre workout"
-    ) {
-      key = "pre workout";
-    } else if (s === "carbs" || s === "carb") {
-      key = "carb";
-    } else if (s === "protein" || s === "creatine" || s === "amino") {
-      key = s;
-    } else {
-      key = "protein";
-    }
-  }
+  const key = await normalizeSectionName(section);
 
   const res = await fetch(`${BASE_URL}get_products_by_section.php`, {
     method: "POST",
@@ -169,13 +221,52 @@ export async function getProductsBySection(section) {
   return [];
 }
 
+// FIXED: Search by ID (more reliable than by name)
+export async function getProductById(p_id) {
+  if (!p_id) throw new Error("Product ID is required");
+  
+  const res = await fetch(`${BASE_URL}get_product_by_id.php`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ p_id: Number(p_id) }),
+  });
+  
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  
+  const result = await res.json();
+  
+  if (result && result.data) {
+    const data = Array.isArray(result.data) ? result.data[0] : result.data;
+    return normalizeProductFromApi(data);
+  }
+  
+  throw new Error("Product not found");
+}
+
+// Legacy: Search by name (kept for backward compatibility)
 export async function getProductByName(name) {
+  if (!name) throw new Error("Product name is required");
+  
   const res = await fetch(`${BASE_URL}get_product_by_id.php`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
-  return res.json();
+  
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  
+  const result = await res.json();
+  
+  if (result && result.data) {
+    const data = Array.isArray(result.data) ? result.data[0] : result.data;
+    return normalizeProductFromApi(data);
+  }
+  
+  throw new Error("Product not found");
 }
 
 export async function createProduct({
@@ -220,20 +311,17 @@ export async function createProduct({
     if (!s) return "";
     return /^https?:\/\//i.test(s)
       ? s
-      : `https://thunder-nutrition.com/${s.replace(/^\/+/, "")}`;
+      : `https://thunder-nutrition.com/product-info/${s.replace(/^\/+/, "")}`;
   };
   if (pname != null) formData.append("pname", String(pname));
   if (name != null) formData.append("name", String(name));
   if (description != null) formData.append("description", String(description));
-  // Legacy key for backend compatibility
   if (description != null)
     formData.append("product_overview", String(description));
   if (science_name != null)
     formData.append("science_name", String(science_name));
   if (how_to_use != null) formData.append("how_to_use", String(how_to_use));
-  // Legacy key for backend compatibility
   if (how_to_use != null) formData.append("method_of_use", String(how_to_use));
-  // Support both qr_code and const_QrCode
   const qrVal = normalizeUrl(qr_code || const_QrCode);
   if (qrVal) {
     formData.append("qr_code", qrVal);
@@ -245,12 +333,10 @@ export async function createProduct({
   if (weight != null) formData.append("weight", String(weight));
   if (sugars != null) formData.append("sugars", String(sugars));
 
-  // معالجة الحقول الرقمية - إرسالها دائماً إذا كانت موجودة وليست فارغة
   if (price !== undefined && price !== null && price !== "") {
     formData.append("price", String(price));
   }
 
-  // Nutrition metrics if provided
   if (protein !== undefined && protein !== null && protein !== "") {
     formData.append("protein", String(protein));
   }
@@ -283,8 +369,6 @@ export async function createProduct({
     formData.append("num_of_scope", String(num_of_scope));
   if (other != null) formData.append("other", String(other));
 
-  // Files: if user selected a File, append it; if it's a string URL, also append as string for backend compatibility
-  // Decide video file to send: prefer vid_url, else first of videos
   const videoFile =
     vid_url instanceof File
       ? vid_url
@@ -294,7 +378,6 @@ export async function createProduct({
       ? videos
       : null;
   if (videoFile) {
-    // Send video file with primary field name
     formData.append("vid_url", videoFile);
   } else if (typeof vid_url === "string" && vid_url.trim() !== "") {
     formData.append("vid_url", vid_url.trim());
@@ -302,7 +385,6 @@ export async function createProduct({
     formData.append("vid_url", String(videos[0]));
   }
 
-  // Decide image file to send: prefer img_url, else first of images
   const imageFile =
     img_url instanceof File
       ? img_url
@@ -312,7 +394,6 @@ export async function createProduct({
       ? images
       : null;
   if (imageFile) {
-    // Send image file with primary field name
     formData.append("img_url", imageFile);
   } else if (img_url != null) {
     formData.append("img_url", String(img_url));
@@ -320,7 +401,6 @@ export async function createProduct({
     formData.append("img_url", String(images[0]));
   }
 
-  // Additional image/background fields: support File or string
   if (img_url2 instanceof File) {
     formData.append("img_url2", img_url2);
   } else if (img_url2 != null) {
@@ -344,7 +424,6 @@ export async function createProduct({
   }
   const data = await res.json();
 
-  // Debug: طباعة رد الـ API
   console.log("API Response:", data);
 
   if (data && data.status === "success") return data;
@@ -394,7 +473,7 @@ export async function updateProduct({
     if (!s) return "";
     return /^https?:\/\//i.test(s)
       ? s
-      : `https://thunder-nutrition.com/${s.replace(/^\/+/, "")}`;
+      : `https://thunder-nutrition.com/product-info/${s.replace(/^\/+/, "")}`;
   };
   if (p_id != null) formData.append("p_id", String(Number(p_id)));
   if (pname != null) formData.append("pname", String(pname));
@@ -403,7 +482,6 @@ export async function updateProduct({
   if (science_name != null)
     formData.append("science_name", String(science_name));
   if (how_to_use != null) formData.append("how_to_use", String(how_to_use));
-  // Support both qr_code and const_QrCode
   const updQrVal = normalizeUrl(qr_code || const_QrCode);
   if (updQrVal) {
     formData.append("qr_code", updQrVal);
@@ -415,12 +493,10 @@ export async function updateProduct({
   if (weight != null) formData.append("weight", String(weight));
   if (sugars != null) formData.append("sugars", String(sugars));
 
-  // معالجة الحقول الرقمية - إرسالها دائماً إذا كانت موجودة وليست فارغة
   if (price !== undefined && price !== null && price !== "") {
     formData.append("price", String(price));
   }
 
-  // Nutrition metrics if provided
   if (protein !== undefined && protein !== null && protein !== "") {
     formData.append("protein", String(protein));
   }
@@ -438,7 +514,6 @@ export async function updateProduct({
     formData.append("flavors", JSON.stringify(flavors));
   }
 
-  // Flavors support: flavor1..flavor4 and combined JSON array (for backward compatibility)
   const updFlavorsArr = [flavor1, flavor2, flavor3, flavor4].filter(
     (f) => f != null && `${f}`.trim() !== ""
   );
@@ -456,7 +531,6 @@ export async function updateProduct({
     formData.append("num_of_scope", String(num_of_scope));
   if (other != null) formData.append("other", String(other));
 
-  // videos/images can be File, array of File, or string path; prefer vid_url/img_url if File, else fallback to first of videos/images
   const updVideoFile =
     vid_url instanceof File
       ? vid_url
@@ -466,7 +540,6 @@ export async function updateProduct({
       ? videos
       : null;
   if (updVideoFile) {
-    // Send video file with primary field name
     formData.append("vid_url", updVideoFile);
   } else if (typeof vid_url === "string" && vid_url.trim() !== "") {
     formData.append("vid_url", vid_url.trim());
@@ -483,7 +556,6 @@ export async function updateProduct({
       ? images
       : null;
   if (updImageFile) {
-    // Send image file with primary field name
     formData.append("img_url", updImageFile);
   } else if (img_url != null) {
     formData.append("img_url", String(img_url));
@@ -518,7 +590,6 @@ export async function updateProduct({
 }
 
 export async function deleteProduct(arg1, maybeSecId) {
-  // arg1 can be p_id (string/number) or an object { p_id, id, product_id, sec_id }
   let p_id = null;
   let sec_id = null;
   if (arg1 && typeof arg1 === "object") {
@@ -530,11 +601,9 @@ export async function deleteProduct(arg1, maybeSecId) {
   }
 
   const formData = new FormData();
-  // Required by backend to specify delete operation
   formData.append("action", "delete");
   if (p_id != null) {
     formData.append("p_id", String(p_id));
-    // Add common alternative keys for compatibility with backend variations
     formData.append("id", String(p_id));
     formData.append("product_id", String(p_id));
     formData.append("pid", String(p_id));
@@ -543,7 +612,6 @@ export async function deleteProduct(arg1, maybeSecId) {
     formData.append("sec_id", String(sec_id));
   }
 
-  // Try dashboard endpoint first, then fallback to root endpoint
   const tryDelete = async (url) => {
     const res = await fetch(url, { method: "POST", body: formData });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -557,11 +625,9 @@ export async function deleteProduct(arg1, maybeSecId) {
 
   let data = await tryDelete(`${BASE_URL}DeleteProduct.php`).catch(() => null);
   if (!data || data.status !== "success") {
-    // Attempt root endpoint using FormData
     data = await tryDelete(`${BASE_URL}DeleteProduct.php`).catch(() => null);
   }
   if (!data || data.status !== "success") {
-    // As a final fallback, attempt JSON payload version (some backends accept JSON only)
     const jsonPayload = {
       action: "delete",
       p_id: p_id != null ? Number(p_id) : undefined,
@@ -590,7 +656,6 @@ export async function deleteProduct(arg1, maybeSecId) {
     }
   }
   if (!data || data.status !== "success") {
-    // As a final fallback, try GET with query string
     const qs = new URLSearchParams();
     qs.set("action", "delete");
     if (p_id != null) {

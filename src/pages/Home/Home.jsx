@@ -1,5 +1,5 @@
 import { Thunder } from "../../../components";
-import { Navbar, Header, Footer, AboutUs, WhyChoos, Verfiy_product , Comment, Contact, Products_home, Details , Popular} from "../../sections";
+import { Navbar, Header, Footer, AboutUs, WhyChoos, Verfiy_product , Comment, Contact, Products_home, Details , Popular, CommingSoon} from "../../sections";
 
 export default function Home() {
   return (
@@ -11,6 +11,7 @@ export default function Home() {
       <Popular />
       <WhyChoos />
       <Products_home />
+      <CommingSoon />
       <Details />
       <Comment />
       <Contact />

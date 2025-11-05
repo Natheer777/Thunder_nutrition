@@ -20,6 +20,7 @@ import chocolate_benutbutter from "../../assets/Flavors/chocolate-bar.png";
 import chocolate_banana from "../../assets/Flavors/energy-bar (1).png";
 import vanilla_bounty from "../../assets/Flavors/vanilla.png";
 import strwberry_banana from "../../assets/Flavors/fruit.png";
+import blueHawai from '../../assets/Flavors/icons8-tropics-48.png'
 
 export default function Details_product() {
   const { identifier } = useParams();
@@ -28,7 +29,6 @@ export default function Details_product() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -251,6 +251,11 @@ export default function Details_product() {
                                 ],
                                 name: "Strawberry & Banana",
                                 image: strwberry_banana,
+                              },
+                              {
+                                keywords: ["blue hawai", "blue & hawai" , "Blue Hawai"],
+                                name: "Blue Hawai",
+                                image: blueHawai,
                               },
                               {
                                 keywords: ["orange lemon", "orange & lemon"],

@@ -1,0 +1,207 @@
+/* Coming Soon Container */
+.comm.coming-soon-container {
+
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+.comm .subtitle {
+  color: #c8e6f3;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+/* Products Grid */
+.comm .products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.comm .product-card {
+  flex: 0 1 calc(33.333% - 1.34rem); /* 3 items per row with gap */
+  max-width: calc(33.333% - 1.34rem);
+  min-width: 280px;
+}
+
+/* Product Card */
+.comm .product-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.comm .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Product Image */
+.comm .product-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comm .product-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  padding: 1rem;
+  transition: transform 0.5s ease;
+}
+
+.comm .product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
+.comm .no-image {
+  padding: 2rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* Coming Soon Badge */
+.comm .coming-soon-badge {
+  position: absolute;
+  top: 1rem;
+  right: -2rem;
+  background: var(--color-blue2);
+  color: white;
+  padding: 0.5rem 2rem;
+  transform: rotate(45deg);
+  font-size: 0.8rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  width: 150px;
+  text-align: center;
+}
+
+/* Product Info */
+.comm .product-info {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: black;
+}
+
+.comm .product-name {
+  font-size: 1.4rem;
+  margin: 0 0 1rem 0;
+  color: var(--color-blue);
+  font-weight: 600;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.comm .product-detail {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comm .product-detail:last-child {
+  border-bottom: 1px solid;
+}
+
+.comm .detail-label {
+  font-weight: 600;
+  color: white;
+}
+
+.comm .detail-value {
+  font-weight: 500;
+  color: var(--color-blue);
+}
+
+/* Loading and Error States */
+.comm .loading,
+.comm .error-message,
+.comm .no-products {
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.comm .error-message {
+  color: #dc3545;
+  background: #fff5f5;
+  border: 1px solid #ffebee;
+}
+
+/* Animations */
+@keyframes comm-pulse {
+  0% {
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 25px rgba(102, 126, 234, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .comm .product-card {
+    flex: 0 1 calc(50% - 1rem); /* 2 items per row on medium screens */
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .comm .coming-soon-container {
+    padding: 1rem;
+  }
+  
+  .comm .coming-soon-container h1 {
+    font-size: 2.2rem;
+  }
+  
+  .comm .product-card {
+    flex: 0 1 100%; /* 1 item per row on small screens */
+    max-width: 100%;
+  }
+  
+  .comm .product-image {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comm .coming-soon-container h1 {
+    font-size: 1.8rem;
+  }
+  
+  .comm .subtitle {
+    font-size: 1rem;
+  }
+  
+  .comm .product-card {
+    min-width: 100%;
+  }
+}

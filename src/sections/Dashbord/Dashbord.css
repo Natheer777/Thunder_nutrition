@@ -349,6 +349,7 @@
   padding: 12px 0px 16px 0px;
   justify-content: center;
   align-items: center;
+  row-gap: 10px;
 }
 
 .dash .product-card:hover {

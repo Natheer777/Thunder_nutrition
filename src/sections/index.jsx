@@ -15,4 +15,5 @@ export { default as Details } from "./Details/Details";
 export { default as Popular } from "./Popular/Popular";
 export { default as Login } from "./Login/Login";
 export { default as Dashbord } from "./Dashbord/Dashbord";
+export { default as CommingSoon } from "./CommingSoon/CommingSoon";
 
